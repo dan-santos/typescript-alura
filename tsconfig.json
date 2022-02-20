@@ -1,0 +1,8 @@
+{
+    "compilerOptions": {
+        "outDir": "dist/js", // pasta onde serao destinados os arquivos JS apos transpilacao
+        "target": "ES6", // Versao do ECMAScript que sera suportada (igual ou superior)
+        "noEmitOnError": true // Nao gera o arquivo json enquanto o arquivo ts estiver dando erro
+    },
+    "include": ["app/**/*"] // Inclui toda subpasta e qualquer arquivo que estiver dentro de app
+}
