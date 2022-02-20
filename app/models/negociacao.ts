@@ -1,27 +1,17 @@
 export class Negociacao {
-    private _data: Date;
-    private _quantidade: number;
-    private _valor: number;
 
-    constructor(data: Date, quantidade: number, valor: number) {
-        this._data = data;
-        this._quantidade = quantidade;
-        this._valor = valor;
-    }
+    constructor(
+        private _data: Date, 
+        readonly quantidade: number, 
+        readonly valor: number
+    ) {}
 
     get data(): Date {
-        return this._data;
-    }
-
-    get quantidade(): number {
-        return this._quantidade;
-    }
-
-    get valor(): number {
-        return this._valor;
+        // Retornando novo obj Date identico a data da negociacao, protegendo a referencia de data privada da classe
+        return new Date(this._data.getTime());
     }
 
     get volume(): number {
-        return this._quantidade * this._valor;
+        return this.quantidade * this.valor;
     }
 }
