@@ -2,6 +2,7 @@ import { Negociacao } from "../models/negociacao.js";
 import { Negociacoes } from "../models/negociacoes.js";
 import { MensagemView } from "../views/mensagem-view.js";
 import { NegociacoesView } from "../views/negociacoes-view.js";
+import { DiasDaSemana } from "../enums/dias-da-semana.js";
 export class NegociacaoController {
     constructor() {
         this.negociacoes = new Negociacoes();
@@ -14,10 +15,18 @@ export class NegociacaoController {
     }
     adiciona() {
         const negociacao = this.criaNegociacao();
-        this.negociacoes.adiciona(negociacao);
-        this.negociacoesView.update(this.negociacoes);
-        this.mensagemView.update('Negociação adicionada com sucesso.');
-        this.limparFormulario();
+        if (this.dataEhDiaUtil(negociacao.data)) {
+            this.negociacoes.adiciona(negociacao);
+            this.limparFormulario();
+            this.atualizaView();
+        }
+        else {
+            this.mensagemView.update('Só é possível adicionar negociações em dias úteis.');
+        }
+    }
+    dataEhDiaUtil(data) {
+        const dia = data.getDay();
+        return dia != DiasDaSemana.DOMINGO && dia != DiasDaSemana.SADADO;
     }
     criaNegociacao() {
         // Acha todos os hifens da data e substitui por virgula (padrao aceito pelo TS)
@@ -35,5 +44,9 @@ export class NegociacaoController {
     }
     focarElemento(elemento) {
         elemento.focus();
+    }
+    atualizaView() {
+        this.negociacoesView.update(this.negociacoes);
+        this.mensagemView.update('Negociação adicionada com sucesso.');
     }
 }

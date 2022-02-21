@@ -2,6 +2,7 @@ import { Negociacao } from "../models/negociacao.js";
 import { Negociacoes } from "../models/negociacoes.js";
 import { MensagemView } from "../views/mensagem-view.js";
 import { NegociacoesView } from "../views/negociacoes-view.js";
+import { DiasDaSemana } from "../enums/dias-da-semana.js";
 
 export class NegociacaoController {
     private inputData: HTMLInputElement;
@@ -20,15 +21,24 @@ export class NegociacaoController {
         this.negociacoesView.update(this.negociacoes);
     }
 
-    adiciona(): void {
+    public adiciona(): void {
         const negociacao = this.criaNegociacao();
-        this.negociacoes.adiciona(negociacao);
-        this.negociacoesView.update(this.negociacoes);
-        this.mensagemView.update('Negociação adicionada com sucesso.');
-        this.limparFormulario();
-    }    
+        if(this.dataEhDiaUtil(negociacao.data)){
+            this.negociacoes.adiciona(negociacao);
+            this.limparFormulario();
+            this.atualizaView();
+        }else{
+            this.mensagemView.update('Só é possível adicionar negociações em dias úteis.')
+        }
+        
+    }
+    
+    private dataEhDiaUtil(data: Date): boolean {
+        const dia = data.getDay();
+        return dia != DiasDaSemana.DOMINGO && dia != DiasDaSemana.SADADO;
+    }
 
-    criaNegociacao(): Negociacao {
+    private criaNegociacao(): Negociacao {
         // Acha todos os hifens da data e substitui por virgula (padrao aceito pelo TS)
         const regex = /-/g;
         const data = new Date(this.inputData.value.replace(regex, ','));
@@ -39,7 +49,7 @@ export class NegociacaoController {
         return new Negociacao(data, quantidade, valor);
     }
 
-    limparFormulario(): void {
+    private limparFormulario(): void {
         this.inputData.value = '';
         this.inputQuantidade.value = '';
         this.inputValor.value = '';
@@ -47,8 +57,13 @@ export class NegociacaoController {
         this.focarElemento(this.inputData);
     }
 
-    focarElemento(elemento: HTMLInputElement): void {
+    private focarElemento(elemento: HTMLInputElement): void {
         elemento.focus();
+    }
+
+    private atualizaView(): void {
+        this.negociacoesView.update(this.negociacoes);
+        this.mensagemView.update('Negociação adicionada com sucesso.');
     }
 }
 
