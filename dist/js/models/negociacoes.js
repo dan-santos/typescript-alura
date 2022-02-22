@@ -6,7 +6,6 @@ export class Negociacoes {
         this.negociacoes.push(negociacao);
     }
     listar() {
-        // Retornando copia da lista original, evitando mutabilidade
         return this.negociacoes;
     }
 }
