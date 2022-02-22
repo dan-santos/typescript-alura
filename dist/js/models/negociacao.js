@@ -11,4 +11,12 @@ export class Negociacao {
     get volume() {
         return this.quantidade * this.valor;
     }
+    static criaDe(dataString, quantidadeString, valorString) {
+        // Acha todos os hifens da data e substitui por virgula (padrao aceito pelo TS)
+        const regex = /-/g;
+        const data = new Date(dataString.replace(regex, ','));
+        const quantidade = parseInt(quantidadeString);
+        const valor = parseFloat(valorString);
+        return new Negociacao(data, quantidade, valor);
+    }
 }

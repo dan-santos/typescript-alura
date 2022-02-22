@@ -11,7 +11,7 @@ export class NegociacaoController {
 
     private negociacoes = new Negociacoes();
 
-    private negociacoesView = new NegociacoesView('#negociacoesView');
+    private negociacoesView = new NegociacoesView('#negociacoesView', true);
     private mensagemView = new MensagemView('#mensagemView');
 
     constructor(){
@@ -22,7 +22,7 @@ export class NegociacaoController {
     }
 
     public adiciona(): void {
-        const negociacao = this.criaNegociacao();
+        const negociacao = Negociacao.criaDe(this.inputData.value, this.inputQuantidade.value, this.inputValor.value);
         if(this.dataEhDiaUtil(negociacao.data)){
             this.negociacoes.adiciona(negociacao);
             this.limparFormulario();
@@ -36,17 +36,6 @@ export class NegociacaoController {
     private dataEhDiaUtil(data: Date): boolean {
         const dia = data.getDay();
         return dia != DiasDaSemana.DOMINGO && dia != DiasDaSemana.SADADO;
-    }
-
-    private criaNegociacao(): Negociacao {
-        // Acha todos os hifens da data e substitui por virgula (padrao aceito pelo TS)
-        const regex = /-/g;
-        const data = new Date(this.inputData.value.replace(regex, ','));
-
-        const quantidade = parseInt(this.inputQuantidade.value);
-        const valor = parseFloat(this.inputValor.value);
-
-        return new Negociacao(data, quantidade, valor);
     }
 
     private limparFormulario(): void {
