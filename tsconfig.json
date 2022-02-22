@@ -1,11 +1,12 @@
 {
     "compilerOptions": {
-        "outDir": "dist/js", // pasta onde serao destinados os arquivos JS apos transpilacao
+        "outDir": "app/dist/js", // pasta onde serao destinados os arquivos JS apos transpilacao
         "target": "ES6", // Versao do ECMAScript que sera suportada (igual ou superior)
         "noEmitOnError": true, // Nao gera o arquivo json enquanto o arquivo ts estiver dando erro
         "noImplicitAny": true, // Impede que variaveis, funcoes e qlqr outra coisa seja tipada como any implicitamente
         "removeComments": true,
-        "strictNullChecks": true // Faz com que o ts realize checagens de possiveis retornos nulos
+        "strictNullChecks": true, // Faz com que o ts realize checagens de possiveis retornos nulos
+        "experimentalDecorators": true // Usando decorator
     },
     "include": ["app/**/*"] // Inclui toda subpasta e qualquer arquivo que estiver dentro de app
 }
