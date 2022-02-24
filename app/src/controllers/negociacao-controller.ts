@@ -7,6 +7,7 @@ import { logarTempoDeExecucao } from "../decorators/logar-tempo-de-execucao.js";
 import { inspect } from "../decorators/inspect.js";
 import { domInject } from "../decorators/dom-injector.js";
 import { NegociacoesService } from "../services/negociacoes-service.js";
+import { imprimir } from "../utils/imprimir.js";
 
 export class NegociacaoController {
     @domInject('#data')
@@ -35,15 +36,23 @@ export class NegociacaoController {
         const negociacao = Negociacao.criaDe(this.inputData.value, this.inputQuantidade.value, this.inputValor.value);
         if(this.dataEhDiaUtil(negociacao.data)){
             this.negociacoes.adiciona(negociacao);
+            imprimir(negociacao, this.negociacoes);
             this.limparFormulario();
             this.atualizaView();
         }else{
-            this.mensagemView.update('Só é possível adicionar negociações em dias úteis.')
+            this.mensagemView.update('Só é possível adicionar negociações em dias úteis.');
         }
     }
 
     public importaDados(): void {
         this.negociacoesService.obterNegociacoes()
+            .then(negociacoesDeHoje => {
+                return negociacoesDeHoje.filter(negociacaoDeHoje => {
+                    return !this.negociacoes.listar()
+                        .some(negociacao => negociacao
+                            .ehIgual(negociacaoDeHoje));
+                });
+            })
             .then(negociacoesDeHoje => {
                 for(let negociacao of negociacoesDeHoje){
                     this.negociacoes.adiciona(negociacao);

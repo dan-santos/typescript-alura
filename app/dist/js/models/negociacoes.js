@@ -8,4 +8,11 @@ export class Negociacoes {
     listar() {
         return this.negociacoes;
     }
+    paraTexto() {
+        return JSON.stringify(this.listar(), null, 2);
+    }
+    ehIgual(negociacoes) {
+        return JSON.stringify(this.negociacoes) === JSON.stringify(negociacoes.listar());
+    }
 }
+//# sourceMappingURL=negociacoes.js.map

@@ -6,7 +6,8 @@
         "noImplicitAny": true, // Impede que variaveis, funcoes e qlqr outra coisa seja tipada como any implicitamente
         "removeComments": true,
         "strictNullChecks": true, // Faz com que o ts realize checagens de possiveis retornos nulos
-        "experimentalDecorators": true // Usando decorator
+        "experimentalDecorators": true, // Usando decorator
+        "sourceMap": true // Faz com que sabemos a respectiva linha gerada de JS no TS
     },
     "include": ["app/**/*"] // Inclui toda subpasta e qualquer arquivo que estiver dentro de app
 }
