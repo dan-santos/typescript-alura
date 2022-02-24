@@ -6,6 +6,7 @@ import { DiasDaSemana } from "../enums/dias-da-semana.js";
 import { logarTempoDeExecucao } from "../decorators/logar-tempo-de-execucao.js";
 import { inspect } from "../decorators/inspect.js";
 import { domInject } from "../decorators/dom-injector.js";
+import { NegociacoesService } from "../services/negociacoes-service.js";
 
 export class NegociacaoController {
     @domInject('#data')
@@ -19,6 +20,8 @@ export class NegociacaoController {
 
     private negociacoesView = new NegociacoesView('#negociacoesView');
     private mensagemView = new MensagemView('#mensagemView');
+
+    private negociacoesService = new NegociacoesService();
 
     constructor(){
         // suprimindo necessidade de tratar possivel retorno nulo
@@ -37,6 +40,16 @@ export class NegociacaoController {
         }else{
             this.mensagemView.update('Só é possível adicionar negociações em dias úteis.')
         }
+    }
+
+    public importaDados(): void {
+        this.negociacoesService.obterNegociacoes()
+            .then(negociacoesDeHoje => {
+                for(let negociacao of negociacoesDeHoje){
+                    this.negociacoes.adiciona(negociacao);
+                }
+                this.negociacoesView.update(this.negociacoes);
+            });
     }
     
     private dataEhDiaUtil(data: Date): boolean {

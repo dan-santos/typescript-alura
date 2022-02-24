@@ -12,11 +12,13 @@ import { DiasDaSemana } from "../enums/dias-da-semana.js";
 import { logarTempoDeExecucao } from "../decorators/logar-tempo-de-execucao.js";
 import { inspect } from "../decorators/inspect.js";
 import { domInject } from "../decorators/dom-injector.js";
+import { NegociacoesService } from "../services/negociacoes-service.js";
 export class NegociacaoController {
     constructor() {
         this.negociacoes = new Negociacoes();
         this.negociacoesView = new NegociacoesView('#negociacoesView');
         this.mensagemView = new MensagemView('#mensagemView');
+        this.negociacoesService = new NegociacoesService();
         this.negociacoesView.update(this.negociacoes);
     }
     adiciona() {
@@ -29,6 +31,15 @@ export class NegociacaoController {
         else {
             this.mensagemView.update('Só é possível adicionar negociações em dias úteis.');
         }
+    }
+    importaDados() {
+        this.negociacoesService.obterNegociacoes()
+            .then(negociacoesDeHoje => {
+            for (let negociacao of negociacoesDeHoje) {
+                this.negociacoes.adiciona(negociacao);
+            }
+            this.negociacoesView.update(this.negociacoes);
+        });
     }
     dataEhDiaUtil(data) {
         const dia = data.getDay();
